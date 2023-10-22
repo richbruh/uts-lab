@@ -16,11 +16,11 @@ function verifyLogin(){
     $row = $stmt -> fetch (PDO::FETCH_ASSOC);
     
     if (!$row) {
-        $alertMessage = "Data not Found !";
+        $alertMessage = "<p>Data not Found !</p>";
         header("Location: ../frontend/login.php?data=" . urlencode($alertMessage));
     } else {
         if (!password_verify($password, $row['password'])) {
-            $alertMessage = "Wrong Password !";
+            $alertMessage = "<p>Wrong Password !</p>";
             header("Location: ../frontend/login.php?data=" . urlencode($alertMessage));
         } else {
             $_SESSION['id_user'] = $row['id'];
@@ -28,4 +28,19 @@ function verifyLogin(){
             header('location: ../frontend/homepage/menu.php');
         }}
 } 
+
+function logout(){
+    session_start();
+    session_unset();
+    session_destroy();
+    header("Location:../frontend/login.php");
+}
+
+if($_POST['mode'] == "verify"){
+    verifyLogin();
+}else if($_POST['mode'] == "register"){
+    header("../frontend/register.php");
+}else{
+    logout();
+}
 ?>
